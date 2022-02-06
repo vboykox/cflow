@@ -5,7 +5,7 @@
 : ${CC:="cc"}
 : ${CPP:="$CC -E"}
 
-progprefix=/usr/bin
+progprefix=/usr/local/bin
 program=""
 graphfile=""
 usecpp=0
@@ -120,7 +120,7 @@ for f in $@; do
             fi
             program="$progprefix/asmgraph"
             programset="asm"
-            graphfile="graphfile $f"
+            graphfile="$graphfile $f"
             if [ "$asparams" = "" ]; then
                 asparams=" -n" # Implicitly use NASM syntax on demand.
             fi
