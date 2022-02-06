@@ -318,9 +318,6 @@ parse_cpp (FILE *fp, int ch)
     ch = skip_whitespaces (fp);
     if (isdigit (ch))
     {
-        int i = 0;
-        char file[PATH_MAX] = { '\0' };
-        
         /* We got some # nn expression - update the line no. */
         line = ch - '0';
         ch = fgetc (fp);
@@ -338,13 +335,6 @@ parse_cpp (FILE *fp, int ch)
          */
         while (ch != EOF && ch != '"')
             ch = fgetc (fp);
-        if (ch == EOF)
-            return ENDOFFILE;
-        
-        /* Get the filename. */
-        while ((ch = fgetc (fp)) != '"' && ch != EOF && i < PATH_MAX - 1)
-            file[i++] = ch;
-
         if (ch == EOF)
             return ENDOFFILE;
     }

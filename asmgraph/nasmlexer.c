@@ -45,7 +45,7 @@ static int curfield = 0;
 
 /* Forward declarations. */
 static int nasm_skip_whitespaces (FILE *fp);
-inline int nasm_skip_strings (FILE *fp, int delim);
+static int nasm_skip_strings (FILE *fp, int delim);
 static int nasm_check_valid_section (char *name);
 static int nasm_check_keyword (char *name);
 static bool_t nasm_is_function_call (char *name);
@@ -81,15 +81,11 @@ nasm_skip_whitespaces (FILE *fp)
         }
         else if (ch == ';')
         {
-            int prev;
-
             /* Skip through comments */
             while (ch != EOF && ch != '\n')
             {
-                prev = ch;
                 if (ch == '\\')
                 {
-                    prev = ch;
                     ch = fgetc (fp);
                     line++;
                 }
@@ -110,7 +106,7 @@ nasm_skip_whitespaces (FILE *fp)
  * \param delim The delimiter character.
  * \return The next character after the delimiter or EOF.
  */
-inline int
+static int
 nasm_skip_strings (FILE *fp, int delim)
 {
     int ch = '\0';
@@ -323,7 +319,6 @@ nasm_lex_create_graph (graph_t *graph, FILE *fp, char *filename)
     char *name = NULL;       /* The current node name. */
     int prev = SEMICOLON;    /* Previous token. */
     int token = SEMICOLON;   /* Current token. */
-    int funcline = -1;
 
     line = 1;
 
@@ -390,7 +385,6 @@ nasm_lex_create_graph (graph_t *graph, FILE *fp, char *filename)
                  * NAME:
                  * We seem to be in the correct function.
                  */
-                funcline = line;
                 if (!add_g_node (graph, FUNCTION, curname, NULL, filename,
                         line))
                     goto memerror;

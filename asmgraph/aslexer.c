@@ -44,7 +44,7 @@ static int line = 0;
 
 /* Forward declarations. */
 static int as_skip_whitespaces (FILE *fp);
-inline int as_skip_strings (FILE *fp, int delim);
+static int as_skip_strings (FILE *fp, int delim);
 static int as_check_valid_section (char *name);
 static int as_check_keyword (char *name);
 static bool_t as_is_function_call (char *name);
@@ -140,7 +140,7 @@ as_skip_whitespaces (FILE *fp)
  * \param delim The delimiter character.
  * \return The next character after the delimiter or EOF.
  */
-inline int
+static int
 as_skip_strings (FILE *fp, int delim)
 {
     int ch = '\0';
@@ -350,7 +350,6 @@ as_lex_create_graph (graph_t *graph, FILE *fp, char *filename)
     char *name = NULL;       /* The current node name. */
     int prev = SEMICOLON;    /* Previous token. */
     int token = SEMICOLON;   /* Current token. */
-    int funcline = -1;
 
     line = 1;
     
@@ -410,7 +409,6 @@ as_lex_create_graph (graph_t *graph, FILE *fp, char *filename)
                  * NAME:
                  * We seem to be in the correct function.
                  */
-                funcline = line;
                 if (!add_g_node (graph, FUNCTION, curname, NULL, filename,
                                  line))
                     goto memerror;
